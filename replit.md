@@ -25,17 +25,19 @@ This is a React-based food ordering application built with Vite, TypeScript, and
 
 ## Recent Setup Changes (September 25, 2025)
 - **Project Import Completed**: Successfully imported fresh GitHub clone
-- **Dependencies**: Installed all npm dependencies (599 packages)
+- **Dependencies**: Installed all npm dependencies (697 packages)
 - **Database Setup**: Created PostgreSQL database with proper schema and seeding
 - **Environment Variables**: Configured admin credentials (admin/admin123) and session secret
 - **Backend Configuration**: Fixed host settings - backend uses localhost:3001
 - **Frontend Configuration**: Vite configured for Replit proxy with 0.0.0.0:5000
-- **Development Workflow**: Set up with proper environment variables
-- **Database Seeding**: Added 12 initial food items to database
+- **Development Workflow**: Set up with proper environment variables including Firebase placeholders
+- **Database Seeding**: Added 12 initial food items to database via direct SQL
 - **API Testing**: All endpoints working correctly (/api/food-items, /api/auth/*)
-- **Deployment Setup**: Configured autoscale deployment with build and run commands
+- **Deployment Setup**: Configured VM deployment with build and run commands
 - **Application Status**: Both frontend and backend running successfully
-- **Production Ready**: Added serve package for static file serving in production
+- **Production Ready**: Added static file serving for production mode
+- **Firebase Integration**: Configured with placeholder values for development
+- **Package Scripts**: Fixed to use npx for proper module execution
 
 ## Backend Configuration
 - **Server**: Express.js running on port 3001
