@@ -4,20 +4,20 @@ import { Link } from "react-router-dom";
 
 export const HeroSection = () => {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-accent to-background">
+    <section className="relative overflow-hidden bg-gradient-to-br from-background to-accent/10">
       <div className="container mx-auto px-4 py-16 md:py-24">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 animate-fade-in">
             <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-              <span className="bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
-                Delicious Food
+              <span className="text-primary">
+                Campus Bites
               </span>
               <br />
-              Delivered Fast
+              <span className="text-foreground">Delivered Fast</span>
             </h1>
             
             <p className="text-lg text-muted-foreground">
-              Order from our canteen menu and get your favorite meals delivered hot and fresh. 
+              Order from our campus menu and get your favorite meals delivered hot and fresh. 
               Skip the queue, save time, and enjoy your food!
             </p>
             
@@ -52,11 +52,11 @@ export const HeroSection = () => {
           </div>
           
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary-glow/20 blur-3xl"></div>
+            <div className="absolute inset-0 bg-primary/10 blur-2xl rounded-3xl"></div>
             <img
               src="/hero-food.jpg"
-              alt="Delicious food"
-              className="relative rounded-2xl shadow-2xl w-full h-auto"
+              alt="Campus Bites food"
+              className="relative rounded-3xl shadow-2xl w-full h-auto border border-border/20"
             />
           </div>
         </div>

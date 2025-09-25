@@ -24,11 +24,14 @@ export const Header = ({ cartItemsCount, onSearch }: HeaderProps) => {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary-glow rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-xl">C</span>
+            <Link to="/" className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                <span className="text-primary-foreground font-bold text-lg tracking-wide">CB</span>
               </div>
-              <span className="hidden sm:inline-block font-bold text-xl">Canteen</span>
+              <div className="hidden sm:block">
+                <span className="font-bold text-xl text-foreground">Campus Bites</span>
+                <div className="text-xs text-muted-foreground">Fresh • Fast • Delicious</div>
+              </div>
             </Link>
             
             <nav className="hidden md:flex items-center space-x-6">
