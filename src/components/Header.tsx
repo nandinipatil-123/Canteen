@@ -1,7 +1,9 @@
-import { Search, ShoppingCart, User, Menu } from "lucide-react";
+import { Search, ShoppingCart, Menu } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
+import { ThemeToggle } from "./ThemeToggle";
+import { AuthButton } from "./AuthButton";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -25,9 +27,11 @@ export const Header = ({ cartItemsCount, onSearch }: HeaderProps) => {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                <span className="text-primary-foreground font-bold text-lg tracking-wide">CB</span>
-              </div>
+              <img 
+                src="/logo.svg" 
+                alt="Campus Bites Logo" 
+                className="w-12 h-12 hover:scale-105 transition-transform duration-300"
+              />
               <div className="hidden sm:block">
                 <span className="font-bold text-xl text-foreground">Campus Bites</span>
                 <div className="text-xs text-muted-foreground">Fresh • Fast • Delicious</div>
@@ -67,9 +71,9 @@ export const Header = ({ cartItemsCount, onSearch }: HeaderProps) => {
               </Button>
             </Link>
 
-            <Button variant="ghost" size="icon">
-              <User className="h-5 w-5" />
-            </Button>
+            <ThemeToggle />
+            
+            <AuthButton />
 
             <Button
               variant="ghost"

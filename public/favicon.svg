@@ -1,8 +1,9 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="32" height="32" rx="8" fill="#8B1538"/>
   <path d="M8 12C8 10.9391 8.42143 9.92172 9.17157 9.17157C9.92172 8.42143 10.9391 8 12 8H20C21.0609 8 22.0783 8.42143 22.8284 9.17157C23.5786 9.92172 24 10.9391 24 12V20C24 21.0609 23.5786 22.0783 22.8284 22.8284C22.0783 23.5786 21.0609 24 20 24H12C10.9391 24 9.92172 23.5786 9.17157 22.8284C8.42143 22.0783 8 21.0609 8 20V12Z" fill="white" fill-opacity="0.1"/>
-  <text x="16" y="21" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">CB</text>
-  <circle cx="10" cy="10" r="1.5" fill="#DC2626"/>
-  <circle cx="22" cy="10" r="1.5" fill="#DC2626"/>
-  <circle cx="16" cy="6" r="1" fill="#DC2626"/>
+  <circle cx="16" cy="13" r="4" fill="white" fill-opacity="0.2"/>
+  <path d="M13 17L16 14L19 17" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="12" cy="21" r="1.5" fill="#DC2626"/>
+  <circle cx="20" cy="21" r="1.5" fill="#DC2626"/>
+  <circle cx="16" cy="24" r="1" fill="#DC2626"/>
 </svg>

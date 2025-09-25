@@ -30,10 +30,6 @@ export const HeroSection = () => {
                 <Star className="w-5 h-5 text-primary" />
                 <span className="text-sm">4.8 rating</span>
               </div>
-              <div className="flex items-center gap-2">
-                <TruckIcon className="w-5 h-5 text-primary" />
-                <span className="text-sm">Free delivery</span>
-              </div>
             </div>
             
             <div className="flex gap-4">

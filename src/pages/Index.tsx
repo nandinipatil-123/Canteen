@@ -1,5 +1,6 @@
 import { HeroSection } from "@/components/HeroSection";
 import { FoodCard } from "@/components/FoodCard";
+import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { useFoodItems } from "@/hooks/useFoodItems";
 import { useCart } from "@/hooks/useCart";
 import { Badge } from "@/components/ui/badge";
@@ -18,8 +19,10 @@ const Index = () => {
   const popularItems = foodItems.slice(3, 7);
 
   return (
-    <div className="min-h-screen bg-background">
-      <HeroSection />
+    <div className="min-h-screen bg-background relative">
+      <AnimatedBackground />
+      <div className="relative z-10">
+        <HeroSection />
       
       {/* Special Offers Section */}
       <section className="py-12 bg-accent">
@@ -121,6 +124,7 @@ const Index = () => {
           )}
         </div>
       </section>
+      </div>
     </div>
   );
 };

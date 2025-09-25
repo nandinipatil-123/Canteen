@@ -10,6 +10,8 @@ import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import { About } from "./pages/About";
+import { Contact } from "./pages/Contact";
 import { Header } from "./components/Header";
 import { useCart } from "./hooks/useCart";
 import { useState } from "react";
@@ -36,6 +38,8 @@ const AppContent = () => {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/confirmation/:orderId" element={<OrderConfirmation />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
