@@ -32,7 +32,7 @@ outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "ADMIN_USERNAME=admin ADMIN_PASSWORD_HASH='$2b$12$ubBbseej.gPGZmXSL6W1DOJXC5uG9VAwoWS8KBRrLByOrWSo0i.tC' npm run dev"
+args = "ADMIN_USERNAME=admin ADMIN_PASSWORD_HASH='$2b$12$o0ewDKwl2hJ5ZUFEHoqrr.AWT3eUI.y/v7J3paeQ7iT1/ks6QEvF.' SESSION_SECRET=super-secret-session-key-for-development-only npm run dev"
 waitForPort = 5000
 
 [[ports]]
@@ -42,7 +42,3 @@ externalPort = 3001
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 32879
-externalPort = 3000
