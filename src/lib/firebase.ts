@@ -1,23 +1,43 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithRedirect, GoogleAuthProvider, signOut } from "firebase/auth";
 
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: `${import.meta.env.VITE_FIREBASE_PROJECT_ID}.firebaseapp.com`,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: `${import.meta.env.VITE_FIREBASE_PROJECT_ID}.appspot.com`,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-};
+// Check if Firebase environment variables are available
+const hasFirebaseConfig = import.meta.env.VITE_FIREBASE_API_KEY && 
+                          import.meta.env.VITE_FIREBASE_PROJECT_ID && 
+                          import.meta.env.VITE_FIREBASE_APP_ID;
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+let auth: any = null;
+let provider: any = null;
 
-const provider = new GoogleAuthProvider();
+if (hasFirebaseConfig) {
+  const firebaseConfig = {
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: `${import.meta.env.VITE_FIREBASE_PROJECT_ID}.firebaseapp.com`,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: `${import.meta.env.VITE_FIREBASE_PROJECT_ID}.appspot.com`,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  };
+
+  const app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  provider = new GoogleAuthProvider();
+} else {
+  console.warn('Firebase configuration is not available. Authentication features will be disabled.');
+}
+
+export { auth };
 
 export const signInWithGoogle = () => {
-  signInWithRedirect(auth, provider);
+  if (auth && provider) {
+    signInWithRedirect(auth, provider);
+  } else {
+    console.warn('Firebase is not configured. Please set up Firebase environment variables.');
+  }
 };
 
 export const signOutUser = () => {
-  return signOut(auth);
+  if (auth) {
+    return signOut(auth);
+  }
+  return Promise.resolve();
 };
