@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { CheckCircle, CreditCard, HandCoins, Loader2, Ticket, Gift, Star, LogIn } from "lucide-react";
 import { CheckoutState, Coupon, Order } from "@/types/food";
-import { signInWithGoogle } from "@/lib/firebase";
+import { MockAuthService } from "@/lib/services/foodService";
 
 const mockCoupons: Coupon[] = [
   { code: "STUDENT10", type: "percentage", value: 10, description: "Student discount", minOrderAmount: 100 },
@@ -38,6 +38,9 @@ const Checkout = () => {
   });
 
   const [order, setOrder] = useState<Order | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [loginData, setLoginData] = useState({ username: '', password: '' });
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [loyaltyPoints, setLoyaltyPoints] = useState(250); // Mock user loyalty points
   const [notes, setNotes] = useState("");
 
@@ -60,18 +63,75 @@ const Checkout = () => {
     );
   }
 
+  const handleLogin = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setIsLoggingIn(true);
+      
+      try {
+        const user = await MockAuthService.login(loginData.username, loginData.password);
+        if (user) {
+          window.location.reload(); // Simple way to refresh auth state
+        } else {
+          toast({
+            title: "Invalid credentials",
+            description: "Please check your username and password",
+            variant: "destructive"
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Login failed",
+          description: "Please try again",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoggingIn(false);
+      }
+    };
+
   if (!user) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <LogIn className="h-16 w-16 mx-auto text-gray-400 mb-4" />
         <h1 className="text-2xl font-bold mb-4">Sign In Required</h1>
         <p className="text-gray-600 mb-8">
-          Please sign in with Google to place your order and track your meals.
+          Please sign in to place your order and track your meals.
         </p>
-        <Button onClick={signInWithGoogle} size="lg">
-          <LogIn className="h-4 w-4 mr-2" />
-          Sign In with Google
-        </Button>
+        
+        <Card className="max-w-md mx-auto">
+          <CardHeader>
+            <CardTitle>Sign In</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  type="text"
+                  value={loginData.username}
+                  onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
+                  placeholder="Enter username (Snehith)"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={loginData.password}
+                  onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                  placeholder="Enter password (12345678)"
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full" disabled={isLoggingIn}>
+                {isLoggingIn ? "Signing in..." : "Sign In"}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     );
   }

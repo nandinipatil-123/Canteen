@@ -328,7 +328,7 @@ app.post('/api/food-items/:id/toggle', requireAuth, async (req, res) => {
 
 // Mock user credentials for development
 const MOCK_USER = {
-  username: 'snehith',
+  username: 'Snehith',
   password: '12345678', // Plain text for simplicity in mock mode
   uid: 'mock-snehith-uid',
   email: 'snehith@example.com',
