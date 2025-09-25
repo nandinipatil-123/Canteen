@@ -3,8 +3,15 @@ import admin from "firebase-admin";
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
+  // Use server-specific environment variable or fall back to Vite env var
+  const projectId = process.env.FIREBASE_PROJECT_ID || process.env.VITE_FIREBASE_PROJECT_ID;
+  
+  if (!projectId) {
+    throw new Error("FIREBASE_PROJECT_ID or VITE_FIREBASE_PROJECT_ID environment variable is required");
+  }
+  
   admin.initializeApp({
-    projectId: process.env.VITE_FIREBASE_PROJECT_ID,
+    projectId: projectId,
   });
 }
 
