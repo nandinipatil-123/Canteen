@@ -1,6 +1,6 @@
 import { HeroSection } from "@/components/HeroSection";
 import { FoodCard } from "@/components/FoodCard";
-import { mockFoodItems } from "@/data/mockData";
+import { useFoodItems } from "@/hooks/useFoodItems";
 import { useCart } from "@/hooks/useCart";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,12 +9,13 @@ import { ArrowRight, Star, TrendingUp, Clock } from "lucide-react";
 
 const Index = () => {
   const { addToCart } = useCart();
+  const { data: foodItems = [], isLoading } = useFoodItems();
   
   // Get featured items (first 6 available items)
-  const featuredItems = mockFoodItems.filter(item => item.available).slice(0, 6);
+  const featuredItems = foodItems.filter(item => item.available).slice(0, 6);
   
   // Get popular items (items with high mock popularity)
-  const popularItems = mockFoodItems.slice(3, 7);
+  const popularItems = foodItems.slice(3, 7);
 
   return (
     <div className="min-h-screen bg-background">
@@ -67,11 +68,23 @@ const Index = () => {
             </Link>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredItems.map((item) => (
-              <FoodCard key={item.id} item={item} onAddToCart={addToCart} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="bg-card rounded-lg p-4 animate-pulse">
+                  <div className="bg-muted h-48 rounded-lg mb-4"></div>
+                  <div className="bg-muted h-4 rounded mb-2"></div>
+                  <div className="bg-muted h-3 rounded w-3/4"></div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {featuredItems.map((item) => (
+                <FoodCard key={item.id} item={item} onAddToCart={addToCart} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
       
@@ -84,16 +97,28 @@ const Index = () => {
             <p className="text-muted-foreground">Based on what others are ordering</p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {popularItems.map((item, index) => (
-              <div key={item.id} className="relative">
-                <Badge className="absolute -top-2 -left-2 z-10 bg-primary text-primary-foreground">
-                  #{index + 1}
-                </Badge>
-                <FoodCard item={item} onAddToCart={addToCart} />
-              </div>
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="bg-card rounded-lg p-4 animate-pulse">
+                  <div className="bg-muted h-48 rounded-lg mb-4"></div>
+                  <div className="bg-muted h-4 rounded mb-2"></div>
+                  <div className="bg-muted h-3 rounded w-3/4"></div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {popularItems.map((item, index) => (
+                <div key={item.id} className="relative">
+                  <Badge className="absolute -top-2 -left-2 z-10 bg-primary text-primary-foreground">
+                    #{index + 1}
+                  </Badge>
+                  <FoodCard item={item} onAddToCart={addToCart} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </div>

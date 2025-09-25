@@ -8,6 +8,7 @@ import Menu from "./pages/Menu";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import { Header } from "./components/Header";
 import { useCart } from "./hooks/useCart";
@@ -34,6 +35,7 @@ const AppContent = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/confirmation/:orderId" element={<OrderConfirmation />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

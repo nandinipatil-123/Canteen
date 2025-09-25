@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { FoodCard } from "@/components/FoodCard";
 import { CategoryFilter } from "@/components/CategoryFilter";
-import { mockFoodItems } from "@/data/mockData";
+import { useFoodItems } from "@/hooks/useFoodItems";
 import { useCart } from "@/hooks/useCart";
 import { Input } from "@/components/ui/input";
 import { Search, Filter } from "lucide-react";
@@ -16,15 +16,16 @@ import {
 
 const Menu = () => {
   const { addToCart } = useCart();
+  const { data: foodItems = [], isLoading, error } = useFoodItems();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("name");
   const [showFilters, setShowFilters] = useState(false);
   
-  const categories = ["All", ...Array.from(new Set(mockFoodItems.map(item => item.category)))];
+  const categories = ["All", ...Array.from(new Set(foodItems.map(item => item.category)))];
   
   const filteredAndSortedItems = useMemo(() => {
-    let items = mockFoodItems;
+    let items = foodItems;
     
     // Filter by category
     if (selectedCategory !== "All") {
@@ -120,8 +121,26 @@ const Menu = () => {
           </p>
         </div>
         
-        {/* Food Grid */}
-        {filteredAndSortedItems.length > 0 ? (
+        {/* Loading State */}
+        {isLoading ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="bg-card rounded-lg p-4 animate-pulse">
+                <div className="bg-muted h-48 rounded-lg mb-4"></div>
+                <div className="bg-muted h-4 rounded mb-2"></div>
+                <div className="bg-muted h-3 rounded w-3/4"></div>
+              </div>
+            ))}
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <div className="w-24 h-24 bg-destructive/10 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <Search className="w-12 h-12 text-destructive" />
+            </div>
+            <h2 className="text-2xl font-semibold mb-2">Error loading menu</h2>
+            <p className="text-muted-foreground">Please try refreshing the page</p>
+          </div>
+        ) : filteredAndSortedItems.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredAndSortedItems.map((item) => (
               <FoodCard key={item.id} item={item} onAddToCart={addToCart} />
