@@ -7,8 +7,8 @@ integrations = ["javascript_supabase:1.0.0", "firebase_barebones_javascript:1.0.
 channel = "stable-25_05"
 
 [deployment]
-deploymentTarget = "autoscale"
-run = ["bash", "-c", "ADMIN_USERNAME=admin ADMIN_PASSWORD_HASH='$2b$12$o0ewDKwl2hJ5ZUFEHoqrr.AWT3eUI.y/v7J3paeQ7iT1/ks6QEvF.' SESSION_SECRET=super-secret-session-key-for-production npm run server & npx serve -s dist -l 5000"]
+deploymentTarget = "vm"
+run = ["npm", "start"]
 build = ["npm", "run", "build"]
 
 [workflows]

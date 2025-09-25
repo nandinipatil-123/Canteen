@@ -12,6 +12,7 @@
     "lint": "npx eslint .",
     "preview": "npx vite preview",
     "server": "npx tsx src/server/index.ts",
+    "start": "NODE_ENV=production npx tsx src/server/index.ts",
     "generate-admin-hash": "node scripts/generate-admin-hash.cjs",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",

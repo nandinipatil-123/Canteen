@@ -3,6 +3,8 @@ import cors from "cors";
 import session from "express-session";
 import bcrypt from "bcryptjs";
 import helmet from "helmet";
+import path from "path";
+import { fileURLToPath } from "url";
 import { RedisStore } from "connect-redis";
 import { createClient } from "redis";
 import { db } from "./db";
@@ -485,6 +487,20 @@ app.post('/api/orders', verifyFirebaseToken, async (req: AuthenticatedRequest, r
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+// Serve static files from the React app build, only in production
+if (isProduction) {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const buildPath = path.join(__dirname, '../../dist');
+  
+  app.use(express.static(buildPath));
+  
+  // Serve React app for all non-API routes
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(buildPath, 'index.html'));
+  });
+}
 
 app.listen(PORT, HOST, () => {
   console.log(`🚀 Server running on ${HOST}:${PORT}`);
