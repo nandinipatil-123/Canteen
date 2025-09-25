@@ -198,9 +198,10 @@ const Checkout = () => {
       // Clear cart
       clearCart();
       
+      // Show success toast with order ID
       toast({
-        title: "Order placed successfully!",
-        description: `Your order has been placed and is being prepared`,
+        title: "Order placed successfully! 🎉",
+        description: `Order ID: ${result.order.id.slice(0, 8).toUpperCase()} - Your order is being prepared`,
       });
       
       // Navigate to orders page to see the new order

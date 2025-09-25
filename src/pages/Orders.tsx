@@ -109,7 +109,7 @@ export const Orders = () => {
                 </div>
                 <div className="text-right">
                   <div className="text-2xl font-bold">
-                    ${order.totalAmount.toFixed(2)}
+                    ₹{order.totalAmount.toFixed(2)}
                   </div>
                   <div className="flex items-center text-sm text-gray-500 mt-1">
                     <CalendarIcon className="h-4 w-4 mr-1" />
@@ -141,13 +141,13 @@ export const Orders = () => {
                           <span className="font-medium">Qty: {item.quantity}</span>
                           <span className="text-gray-500">•</span>
                           <span className="font-medium">
-                            ${(item.priceAtTime / 100).toFixed(2)} each
+                            ₹{(item.priceAtTime / 100).toFixed(2)} each
                           </span>
                         </div>
                       </div>
                       <div className="text-right">
                         <div className="font-semibold">
-                          ${((item.priceAtTime / 100) * item.quantity).toFixed(2)}
+                          ₹{((item.priceAtTime / 100) * item.quantity).toFixed(2)}
                         </div>
                       </div>
                     </div>

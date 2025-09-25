@@ -467,7 +467,7 @@ app.get('/api/orders', async (req, res) => {
         
         return {
           ...order,
-          totalAmount: order.totalAmount / 100, // Convert from cents to dollars
+          totalAmount: order.totalAmount / 100, // Convert from paisa to rupees
           orderItems: items
         };
       })
@@ -616,7 +616,7 @@ app.post('/api/orders', async (req, res) => {
     res.status(201).json({
       order: {
         ...newOrder,
-        totalAmount: newOrder.totalAmount / 100, // Convert back to dollars for response
+        totalAmount: newOrder.totalAmount / 100, // Convert back to rupees for response
       },
       orderItems: createdOrderItems,
     });
