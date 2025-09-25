@@ -1,6 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "./useAuth";
-import { auth } from "../lib/firebase";
 
 interface OrderItem {
   id: string;
@@ -28,14 +27,6 @@ interface Order {
   orderItems: OrderItem[];
 }
 
-// Helper function to get ID token
-const getIdToken = async () => {
-  if (!auth?.currentUser) {
-    throw new Error("User not authenticated");
-  }
-  return await auth.currentUser.getIdToken();
-};
-
 // Fetch user orders
 export const useOrders = () => {
   const { user } = useAuth();
@@ -47,11 +38,9 @@ export const useOrders = () => {
         throw new Error("User not authenticated");
       }
       
-      const idToken = await getIdToken();
-      
       const response = await fetch(`/api/orders`, {
+        credentials: 'include', // Include cookies for session auth
         headers: {
-          'Authorization': `Bearer ${idToken}`,
           'Content-Type': 'application/json',
         },
       });
@@ -80,12 +69,10 @@ export const useCreateOrder = () => {
         throw new Error("User not authenticated");
       }
       
-      const idToken = await getIdToken();
-      
       const response = await fetch("/api/orders", {
         method: "POST",
+        credentials: 'include', // Include cookies for session auth
         headers: {
-          'Authorization': `Bearer ${idToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(orderData),
