@@ -1,0 +1,105 @@
+19The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.Understand this error
+19The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?Understand this error
+19The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.Understand this error
+_app-2918f86792b977d4.js:34 
+      /////////////////////
+   ///////////////////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////        Curious and driven?
+  ///////////////@@@@@@@///////        Work with us!
+  ///////////////@@@@@@@///////
+  ///////////////@@@@@@@///////        https://join.replit.com/hack.with.us
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@#//////////////
+   ///////////////////////////
+      /////////////////////
+      
+/~:1 The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.Understand this error
+/~:1 The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?Understand this error
+/~:1 The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.Understand this error
+_app-2918f86792b977d4.js:34 [LaunchDarkly] LaunchDarkly client initialized
+main.MWI4MDAwODU3MQ.js:1 Deprecated API for given entry type.
+(anonymous) @ main.MWI4MDAwODU3MQ.js:1Understand this warning
+/~:1 Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner.
+6504-9befa9846da76296.js:1 WebSocket connection to 'wss://eval.worf.platform.replit.com/wsv2/v2.public.Q2dZSXRZVFR4Z1lTQmdqVW9OUEdCaUlFZDI5eVpqQUFPc3dCQ2lReVkyTTNNVGcxTkMxa01qVXhMVFE1TnpZdE9ETXpNaTFqWVdKaE1UZGxNVFEwWkdNU0EyNXBlQm9XY21Wd2JHbDBMWEpsY0d3dFptbHNaWE10ZDI5eVppSUtURzlqWVd4VGRHRmpheW9PYzI5dFpYUm9hVzVuTURBd09UZENUZ29YY21Wd2JHbDBMWEpsY0d3dFlteHZZMnR6TFhkdmNtWVNGWEpsY0d4cGRDMXlaWEJzTFcxbGRHRXRkMjl5WmhvY2NtVndiR2wwTFcxaGNtZGhjbWx1WlMxaWJHOWphM010ZDI5eVprb0hDTVNPOEJZUUFWQUFXZzVwYm5SbGJuUmZjM1IxWkdWdWRIZ0FVaVFJQVJDQWdJQ0FDQmtBQUFBQUFBQVFRQ0VBQUFBQUFBQVFRQ2lBZ0lDQUVEQUNPQUJnQUdvVkNNU084QllTRG5OdmJXVjBhR2x1WnpBd01EazNnZ0VDS2dDYUFRb0tDREF1TUM0eE9EZ3dvQUVBwsqyIyR8wSidP22FhC9J_b6Jkl-62FPQf4LPpcoiGtGuBC4N3BVOYLnrPmVEzcLh2fFGv_4NNIWCU0HN3KWICw.Q2dad2NtOWtPak1pQ25KbGNHeHBkQzVqYjIwPQ' failed: 
+connect @ 6504-9befa9846da76296.js:1Understand this error
+_app-2918f86792b977d4.js:10 WebSocket connection to 'wss://replit.com/graphql_subscriptions' failed: 
+(anonymous) @ _app-2918f86792b977d4.js:10Understand this error
+events.launchdarkly.com/events/bulk/62b35a865152ab14c5942820:1  Failed to load resource: net::ERR_NAME_NOT_RESOLVEDUnderstand this error
+api.sorryapp.com/v1/pages/27c7b5fc:1  Failed to load resource: net::ERR_NAME_NOT_RESOLVEDUnderstand this error
+/graphql:1  Failed to load resource: net::ERR_NAME_NOT_RESOLVEDUnderstand this error
+/data/repls/2cc71854-d251-4976-8332-caba17e144dc/get_connection_metadata:1  Failed to load resource: net::ERR_NAME_NOT_RESOLVEDUnderstand this error
+events.launchdarkly.com/events/diagnostic/62b35a865152ab14c5942820:1  Failed to load resource: net::ERR_NAME_NOT_RESOLVEDUnderstand this error
+4945-4d5760be32fa56db.js:1 WebSocket connection to 'wss://production-chort.replit.com/api/river' failed: 
+(anonymous) @ 4945-4d5760be32fa56db.js:1Understand this error
+events.launchdarkly.com/events/bulk/62b35a865152ab14c5942820:1  Failed to load resource: net::ERR_NETWORK_CHANGEDUnderstand this error
+events.launchdarkly.com/events/diagnostic/62b35a865152ab14c5942820:1  Failed to load resource: net::ERR_NETWORK_CHANGEDUnderstand this error
+/ai/auth:1  Failed to load resource: the server responded with a status of 400 ()Understand this error
+/ai/auth:1  Failed to load resource: the server responded with a status of 400 ()Understand this error
+/ai/auth:1  Failed to load resource: the server responded with a status of 400 ()Understand this error
+/ai/auth:1  Failed to load resource: the server responded with a status of 400 ()Understand this error
+_app-2918f86792b977d4.js:34 Uncaught Error: Unable to connect. Please try again later.
+    at onRetriesExceeded (home-3defc071880615ad.js:1:7388)
+    at 4945-4d5760be32fa56db.js:1:115888
+    at h.dispatchEvent (649-8a4b18fa75b5a0d0.js:1:29845)
+    at d.protocolError (649-8a4b18fa75b5a0d0.js:1:30389)
+    at d.connect (649-8a4b18fa75b5a0d0.js:1:62085)
+    at t.connect (4945-4d5760be32fa56db.js:1:117000)
+    at HTMLDocument.A (4945-4d5760be32fa56db.js:1:116243)
+    at HTMLDocument.n (_app-2918f86792b977d4.js:34:2959)Understand this error
+10Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.Understand this error
+framework-d2381563b342217b.js:1 Unrecognized feature: 'ambient-light-sensor'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+framework-d2381563b342217b.js:1 Unrecognized feature: 'battery'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+framework-d2381563b342217b.js:1 Unrecognized feature: 'execution-while-not-rendered'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+framework-d2381563b342217b.js:1 Unrecognized feature: 'execution-while-out-of-viewport'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+framework-d2381563b342217b.js:1 Unrecognized feature: 'layout-animations'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+framework-d2381563b342217b.js:1 Unrecognized feature: 'legacy-image-formats'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+framework-d2381563b342217b.js:1 Unrecognized feature: 'navigation-override'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+framework-d2381563b342217b.js:1 Unrecognized feature: 'oversized-images'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+framework-d2381563b342217b.js:1 Unrecognized feature: 'publickey-credentials'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+framework-d2381563b342217b.js:1 Unrecognized feature: 'speaker-selection'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+framework-d2381563b342217b.js:1 Unrecognized feature: 'unoptimized-images'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+framework-d2381563b342217b.js:1 Unrecognized feature: 'unsized-media'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+framework-d2381563b342217b.js:1 Unrecognized feature: 'pointer-lock'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+framework-d2381563b342217b.js:1 Allow attribute will take precedence over 'allowfullscreen'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+framework-d2381563b342217b.js:1 Allow attribute will take precedence over 'allowpaymentrequest'.
+_ @ framework-d2381563b342217b.js:1Understand this warning
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'ambient-light-sensor'.Understand this warning
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'battery'.Understand this warning
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'execution-while-not-rendered'.Understand this warning
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'execution-while-out-of-viewport'.Understand this warning
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'layout-animations'.Understand this warning
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'legacy-image-formats'.Understand this warning
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'navigation-override'.Understand this warning
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'oversized-images'.Understand this warning
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'publickey-credentials'.Understand this warning
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'speaker-selection'.Understand this warning
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'unoptimized-images'.Understand this warning
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Unrecognized feature: 'unsized-media'.Understand this warning
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Allow attribute will take precedence over 'allowfullscreen'.Understand this warning
+workspace_iframe.html?initialPath=%2F&id=%3Arbn%3A:32 Allow attribute will take precedence over 'allowpaymentrequest'.Understand this warning
+(index):1  Failed to load resource: the server responded with a status of 403 (Forbidden)Understand this error
+(index):1  Failed to load resource: the server responded with a status of 403 (Forbidden)Understand this error
+(index):1  Failed to load resource: the server responded with a status of 403 (Forbidden)Understand this error
+(index):1  Failed to load resource: the server responded with a status of 403 (Forbidden)Understand this error
+(index):1  Failed to load resource: the server responded with a status of 403 (Forbidden)Understand this error
+(index):1  Failed to load resource: the server responded with a status of 403 (Forbidden)Understand this error
+(index):1  Failed to load resource: the server responded with a status of 403 (Forbidden)Understand this error
+(index):1  Failed to load resource: the server responded with a status of 403 (Forbidden)Understand this error
+(index):1  Failed to load resource: the server responded with a status of 403 (Forbidden)
