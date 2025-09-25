@@ -11,7 +11,7 @@ import { eq } from "drizzle-orm";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3001;
-const HOST = process.env.HOST || '0.0.0.0';
+const HOST = 'localhost';
 
 // Trust first proxy for secure headers and real IP addresses
 app.set('trust proxy', 1);
