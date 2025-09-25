@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/hooks/useCart";
+import { useAuth } from "@/hooks/useAuth";
+import { useCreateOrder } from "@/hooks/useOrders";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,8 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CheckCircle, CreditCard, HandCoins, Loader2, Ticket, Gift, Star } from "lucide-react";
+import { CheckCircle, CreditCard, HandCoins, Loader2, Ticket, Gift, Star, LogIn } from "lucide-react";
 import { CheckoutState, Coupon, Order } from "@/types/food";
+import { signInWithGoogle } from "@/lib/firebase";
 
 const mockCoupons: Coupon[] = [
   { code: "STUDENT10", type: "percentage", value: 10, description: "Student discount", minOrderAmount: 100 },
@@ -20,6 +23,8 @@ const mockCoupons: Coupon[] = [
 
 const Checkout = () => {
   const { cartItems, clearCart } = useCart();
+  const { user, loading: authLoading } = useAuth();
+  const createOrderMutation = useCreateOrder();
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -34,6 +39,7 @@ const Checkout = () => {
 
   const [order, setOrder] = useState<Order | null>(null);
   const [loyaltyPoints, setLoyaltyPoints] = useState(250); // Mock user loyalty points
+  const [notes, setNotes] = useState("");
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const tax = subtotal * 0.05;
@@ -44,6 +50,31 @@ const Checkout = () => {
       navigate("/cart");
     }
   }, [cartItems, navigate, checkoutState.isProcessing]);
+
+  // Show authentication required if user is not signed in
+  if (authLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <LogIn className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+        <h1 className="text-2xl font-bold mb-4">Sign In Required</h1>
+        <p className="text-gray-600 mb-8">
+          Please sign in with Google to place your order and track your meals.
+        </p>
+        <Button onClick={signInWithGoogle} size="lg">
+          <LogIn className="h-4 w-4 mr-2" />
+          Sign In with Google
+        </Button>
+      </div>
+    );
+  }
 
   const validateCoupon = (code: string) => {
     const coupon = mockCoupons.find(c => c.code.toLowerCase() === code.toLowerCase());
@@ -89,37 +120,42 @@ const Checkout = () => {
   const processPayment = async () => {
     setCheckoutState(prev => ({ ...prev, isProcessing: true }));
     
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    const newOrder: Order = {
-      id: `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
-      items: cartItems.map(item => ({ ...item })), // Clone cart items to prevent mutation
-      subtotal,
-      discount: checkoutState.discount,
-      loyaltyPointsUsed: checkoutState.loyaltyPointsUsed,
-      total: finalTotal,
-      paymentMethod: checkoutState.paymentMethod as 'cash' | 'card',
-      status: 'preparing',
-      orderTime: new Date(),
-      estimatedTime: new Date(Date.now() + 20 * 60 * 1000), // 20 minutes from now
-      couponCode: checkoutState.couponCode || undefined
-    };
-
-    // Save order to localStorage for confirmation page
-    localStorage.setItem(`order_${newOrder.id}`, JSON.stringify(newOrder));
-    
-    setOrder(newOrder);
-    setLoyaltyPoints(prev => prev - checkoutState.loyaltyPointsUsed + Math.floor(finalTotal / 10));
-    clearCart();
-    
-    // Navigate to confirmation page
-    navigate(`/confirmation/${newOrder.id}`);
-    
-    toast({
-      title: "Order placed successfully!",
-      description: `Order ${newOrder.id} is being prepared`
-    });
+    try {
+      // Create order in database
+      const orderData = {
+        items: cartItems.map(item => ({
+          foodItemId: item.id,
+          quantity: item.quantity
+        })),
+        notes: notes || undefined
+      };
+      
+      const result = await createOrderMutation.mutateAsync(orderData);
+      
+      // Update loyalty points
+      setLoyaltyPoints(prev => prev - checkoutState.loyaltyPointsUsed + Math.floor(finalTotal / 10));
+      
+      // Clear cart
+      clearCart();
+      
+      toast({
+        title: "Order placed successfully!",
+        description: `Your order has been placed and is being prepared`,
+      });
+      
+      // Navigate to orders page to see the new order
+      navigate("/orders");
+      
+    } catch (error: any) {
+      console.error("Order creation failed:", error);
+      toast({
+        title: "Order failed",
+        description: error.message || "Failed to place order. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setCheckoutState(prev => ({ ...prev, isProcessing: false }));
+    }
   };
 
 
@@ -174,6 +210,25 @@ const Checkout = () => {
                   <Button onClick={applyCoupon} variant="outline" data-testid="button-apply-coupon">
                     Apply
                   </Button>
+                </div>
+                
+                {/* Special Instructions */}
+                <div className="mt-4">
+                  <Label htmlFor="notes" className="text-sm font-medium">
+                    Special Instructions (Optional)
+                  </Label>
+                  <textarea
+                    id="notes"
+                    placeholder="Add any special instructions for your order..."
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    className="mt-1 w-full p-3 border border-input rounded-md resize-none text-sm"
+                    rows={3}
+                    maxLength={200}
+                  />
+                  <div className="text-xs text-muted-foreground mt-1">
+                    {notes.length}/200 characters
+                  </div>
                 </div>
                 
                 {/* Student Loyalty Points */}
@@ -283,14 +338,14 @@ const Checkout = () => {
                 <Button
                   className="w-full mt-4"
                   size="lg"
-                  disabled={!checkoutState.paymentMethod || checkoutState.isProcessing || finalTotal <= 0}
+                  disabled={!checkoutState.paymentMethod || createOrderMutation.isPending || finalTotal <= 0}
                   onClick={processPayment}
                   data-testid="button-place-order"
                 >
-                  {checkoutState.isProcessing ? (
+                  {createOrderMutation.isPending ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Processing...
+                      Placing Order...
                     </>
                   ) : (
                     `Place Order - ₹${finalTotal.toFixed(2)}`

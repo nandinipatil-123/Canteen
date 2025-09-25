@@ -12,6 +12,7 @@ import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import { About } from "./pages/About";
 import { Contact } from "./pages/Contact";
+import { Orders } from "./pages/Orders";
 import { Header } from "./components/Header";
 import { useCart } from "./hooks/useCart";
 import { useState } from "react";
@@ -36,6 +37,7 @@ const AppContent = () => {
         <Route path="/menu" element={<Menu />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/orders" element={<Orders />} />
         <Route path="/confirmation/:orderId" element={<OrderConfirmation />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/about" element={<About />} />

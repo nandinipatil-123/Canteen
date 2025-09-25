@@ -6,8 +6,9 @@ import helmet from "helmet";
 import { RedisStore } from "connect-redis";
 import { createClient } from "redis";
 import { db } from "./db";
-import { foodItems } from "./db/schema";
-import { eq } from "drizzle-orm";
+import { foodItems, orders, orderItems } from "./db/schema";
+import { eq, desc } from "drizzle-orm";
+import { verifyFirebaseToken, AuthenticatedRequest } from "./middleware/auth";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3001;
@@ -316,6 +317,171 @@ app.post('/api/food-items/:id/toggle', requireAuth, async (req, res) => {
     });
   } catch (error) {
     console.error('Error toggling food item availability:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Orders API endpoints
+
+// GET /api/orders - Get all orders for authenticated user
+app.get('/api/orders', verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+    
+    // Get orders for the authenticated user only
+    const userOrders = await db
+      .select()
+      .from(orders)
+      .where(eq(orders.userId, req.user.uid))
+      .orderBy(desc(orders.createdAt));
+    
+    // For each order, get its items with food details
+    const ordersWithItems = await Promise.all(
+      userOrders.map(async (order) => {
+        const items = await db
+          .select({
+            id: orderItems.id,
+            quantity: orderItems.quantity,
+            priceAtTime: orderItems.priceAtTime,
+            foodItem: {
+              id: foodItems.id,
+              name: foodItems.name,
+              description: foodItems.description,
+              image: foodItems.image,
+              category: foodItems.category,
+            }
+          })
+          .from(orderItems)
+          .leftJoin(foodItems, eq(orderItems.foodItemId, foodItems.id))
+          .where(eq(orderItems.orderId, order.id));
+        
+        return {
+          ...order,
+          totalAmount: order.totalAmount / 100, // Convert from cents to dollars
+          orderItems: items
+        };
+      })
+    );
+    
+    const formattedOrders = ordersWithItems;
+    res.json(formattedOrders);
+  } catch (error) {
+    console.error('Error fetching user orders:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// POST /api/orders - Create a new order for authenticated user
+app.post('/api/orders', verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+    
+    const { items, notes } = req.body;
+    
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: 'Items array is required and cannot be empty' });
+    }
+    
+    // Validate items structure
+    for (const item of items) {
+      if (!item.foodItemId || !item.quantity || item.quantity <= 0) {
+        return res.status(400).json({ error: 'Invalid item structure. Each item needs foodItemId and positive quantity' });
+      }
+    }
+    
+    // Get food item details and validate they exist
+    const foodItemIds = items.map(item => item.foodItemId);
+    const dbFoodItems = await db
+      .select()
+      .from(foodItems)
+      .where(eq(foodItems.id, foodItemIds[0])); // We'll check each one individually
+    
+    // Check each food item exists and is available
+    for (const item of items) {
+      const [foodItem] = await db
+        .select()
+        .from(foodItems)
+        .where(eq(foodItems.id, item.foodItemId));
+      
+      if (!foodItem) {
+        return res.status(404).json({ error: `Food item not found: ${item.foodItemId}` });
+      }
+      
+      if (!foodItem.available) {
+        return res.status(400).json({ error: `Food item not available: ${foodItem.name}` });
+      }
+    }
+    
+    // Calculate server-side total from database prices for security
+    let calculatedTotal = 0;
+    const validatedItems = [];
+    
+    for (const item of items) {
+      const [foodItem] = await db
+        .select()
+        .from(foodItems)
+        .where(eq(foodItems.id, item.foodItemId));
+      
+      if (!foodItem) {
+        return res.status(404).json({ error: `Food item not found: ${item.foodItemId}` });
+      }
+      
+      if (!foodItem.available) {
+        return res.status(400).json({ error: `Food item not available: ${foodItem.name}` });
+      }
+      
+      const itemTotal = foodItem.price * item.quantity;
+      calculatedTotal += itemTotal;
+      
+      validatedItems.push({
+        foodItemId: item.foodItemId,
+        quantity: item.quantity,
+        priceAtTime: foodItem.price,
+      });
+    }
+    
+    // Add tax (5%)
+    const finalTotal = Math.round(calculatedTotal * 1.05);
+    
+    // Create the order with calculated total
+    const [newOrder] = await db
+      .insert(orders)
+      .values({
+        userId: req.user.uid,
+        userEmail: req.user.email,
+        userName: req.user.name || null,
+        totalAmount: finalTotal, // Already in cents from database
+        status: 'pending',
+        notes: notes || null,
+      })
+      .returning();
+    
+    // Create order items
+    const orderItemsData = validatedItems.map(item => ({
+      orderId: newOrder.id,
+      foodItemId: item.foodItemId,
+      quantity: item.quantity,
+      priceAtTime: item.priceAtTime,
+    }));
+    
+    const createdOrderItems = await db
+      .insert(orderItems)
+      .values(orderItemsData)
+      .returning();
+    
+    res.status(201).json({
+      order: {
+        ...newOrder,
+        totalAmount: newOrder.totalAmount / 100, // Convert back to dollars for response
+      },
+      orderItems: createdOrderItems,
+    });
+  } catch (error) {
+    console.error('Error creating order:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

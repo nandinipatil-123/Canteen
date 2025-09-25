@@ -1,14 +1,16 @@
 import { Button } from "./ui/button";
-import { User, LogOut } from "lucide-react";
+import { User, LogOut, ShoppingBag } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { signInWithGoogle, signOutUser } from "../lib/firebase";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Link } from "react-router-dom";
 
 export const AuthButton = () => {
   const { user, loading } = useAuth();
@@ -39,6 +41,14 @@ export const AuthButton = () => {
             <div className="font-medium">{user.displayName}</div>
             <div className="text-sm text-muted-foreground">{user.email}</div>
           </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link to="/orders" className="w-full">
+              <ShoppingBag className="mr-2 h-4 w-4" />
+              My Orders
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => signOutUser()}>
             <LogOut className="mr-2 h-4 w-4" />
             Sign out
