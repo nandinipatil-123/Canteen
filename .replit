@@ -29,7 +29,7 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "ADMIN_USERNAME=admin ADMIN_PASSWORD_HASH='$2b$12$o0ewDKwl2hJ5ZUFEHoqrr.AWT3eUI.y/v7J3paeQ7iT1/ks6QEvF.' VITE_FIREBASE_PROJECT_ID=demo-project VITE_FIREBASE_API_KEY=demo-api-key VITE_FIREBASE_APP_ID=demo-app-id npm run dev"
+args = "ADMIN_USERNAME=admin ADMIN_PASSWORD_HASH='$2b$12$YVZ7.67OZeymrMIKBnHSkO/9FEw1liYnJZDo7vHBFhid1ri6Hjtqa' VITE_FIREBASE_PROJECT_ID=demo-project VITE_FIREBASE_API_KEY=demo-api-key VITE_FIREBASE_APP_ID=demo-app-id npm run dev"
 waitForPort = 5000
 
 [workflows.workflow.metadata]
@@ -43,3 +43,7 @@ exposeLocalhost = true
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 33049
+externalPort = 3000

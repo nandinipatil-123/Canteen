@@ -325,10 +325,115 @@ app.post('/api/food-items/:id/toggle', requireAuth, async (req, res) => {
 
 // Orders API endpoints
 
-// GET /api/orders - Get all orders for authenticated user
-app.get('/api/orders', verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
+// Mock user credentials for development
+const MOCK_USER = {
+  username: 'snehith',
+  password: '12345678', // Plain text for simplicity in mock mode
+  uid: 'mock-snehith-uid',
+  email: 'snehith@example.com',
+  name: 'Snehith'
+};
+
+// Session-based mock authentication check
+const requireMockAuth = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (!(req.session as any)?.mockUser) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+  next();
+};
+
+// Mock user authentication endpoints
+app.post('/api/auth/mock-login', async (req, res) => {
   try {
-    if (!req.user) {
+    const { username, password } = req.body;
+    
+    if (!username || !password) {
+      return res.status(400).json({ error: 'Username and password required' });
+    }
+    
+    // Simple validation for mock user
+    if (username === MOCK_USER.username && password === MOCK_USER.password) {
+      // Set mock user in session
+      (req.session as any).mockUser = {
+        uid: MOCK_USER.uid,
+        email: MOCK_USER.email,
+        name: MOCK_USER.name
+      };
+      
+      res.json({ 
+        success: true, 
+        user: {
+          uid: MOCK_USER.uid,
+          email: MOCK_USER.email,
+          displayName: MOCK_USER.name
+        }
+      });
+    } else {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+  } catch (error) {
+    console.error('Mock login error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/api/auth/mock-logout', (req, res) => {
+  delete (req.session as any).mockUser;
+  res.json({ success: true, message: 'Logged out successfully' });
+});
+
+app.get('/api/auth/mock-check', (req, res) => {
+  const mockUser = (req.session as any)?.mockUser;
+  if (mockUser) {
+    res.json({ 
+      authenticated: true, 
+      user: {
+        uid: mockUser.uid,
+        email: mockUser.email,
+        displayName: mockUser.name
+      }
+    });
+  } else {
+    res.json({ authenticated: false });
+  }
+});
+
+// GET /api/orders - Get all orders for authenticated user (supports both Firebase and mock auth)
+app.get('/api/orders', async (req, res) => {
+  try {
+    let userId = null;
+    let userEmail = null;
+    let userName = null;
+
+    // Check for Firebase auth token first
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const idToken = authHeader.split('Bearer ')[1];
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
+        userId = decodedToken.uid;
+        userEmail = decodedToken.email || '';
+        userName = decodedToken.name;
+      } catch (firebaseError) {
+        // Firebase auth failed, check for mock auth
+        const mockUser = (req.session as any)?.mockUser;
+        if (mockUser) {
+          userId = mockUser.uid;
+          userEmail = mockUser.email;
+          userName = mockUser.name;
+        }
+      }
+    } else {
+      // No auth header, check for mock auth
+      const mockUser = (req.session as any)?.mockUser;
+      if (mockUser) {
+        userId = mockUser.uid;
+        userEmail = mockUser.email;
+        userName = mockUser.name;
+      }
+    }
+
+    if (!userId) {
       return res.status(401).json({ error: 'Authentication required' });
     }
     
@@ -336,7 +441,7 @@ app.get('/api/orders', verifyFirebaseToken, async (req: AuthenticatedRequest, re
     const userOrders = await db
       .select()
       .from(orders)
-      .where(eq(orders.userId, req.user.uid))
+      .where(eq(orders.userId, userId))
       .orderBy(desc(orders.createdAt));
     
     // For each order, get its items with food details
@@ -375,10 +480,42 @@ app.get('/api/orders', verifyFirebaseToken, async (req: AuthenticatedRequest, re
   }
 });
 
-// POST /api/orders - Create a new order for authenticated user
-app.post('/api/orders', verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
+// POST /api/orders - Create a new order for authenticated user (supports both Firebase and mock auth)
+app.post('/api/orders', async (req, res) => {
   try {
-    if (!req.user) {
+    let userId = null;
+    let userEmail = null;
+    let userName = null;
+
+    // Check for Firebase auth token first
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const idToken = authHeader.split('Bearer ')[1];
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
+        userId = decodedToken.uid;
+        userEmail = decodedToken.email || '';
+        userName = decodedToken.name;
+      } catch (firebaseError) {
+        // Firebase auth failed, check for mock auth
+        const mockUser = (req.session as any)?.mockUser;
+        if (mockUser) {
+          userId = mockUser.uid;
+          userEmail = mockUser.email;
+          userName = mockUser.name;
+        }
+      }
+    } else {
+      // No auth header, check for mock auth
+      const mockUser = (req.session as any)?.mockUser;
+      if (mockUser) {
+        userId = mockUser.uid;
+        userEmail = mockUser.email;
+        userName = mockUser.name;
+      }
+    }
+
+    if (!userId) {
       return res.status(401).json({ error: 'Authentication required' });
     }
     
@@ -453,9 +590,9 @@ app.post('/api/orders', verifyFirebaseToken, async (req: AuthenticatedRequest, r
     const [newOrder] = await db
       .insert(orders)
       .values({
-        userId: req.user.uid,
-        userEmail: req.user.email,
-        userName: req.user.name || null,
+        userId: userId,
+        userEmail: userEmail,
+        userName: userName || null,
         totalAmount: finalTotal, // Already in cents from database
         status: 'pending',
         notes: notes || null,

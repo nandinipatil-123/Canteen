@@ -2,6 +2,7 @@ import { Button } from "./ui/button";
 import { User, LogOut, ShoppingBag } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { signInWithGoogle, signOutUser } from "../lib/firebase";
+import { MockAuthService } from "../lib/services/foodService";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,11 +10,26 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export const AuthButton = () => {
-  const { user, loading } = useAuth();
+  const { user, loading, useMockAuth } = useAuth();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [loginData, setLoginData] = useState({ username: '', password: '' });
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   if (loading) {
     return (
@@ -49,7 +65,7 @@ export const AuthButton = () => {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOutUser()}>
+          <DropdownMenuItem onClick={handleSignOut}>
             <LogOut className="mr-2 h-4 w-4" />
             Sign out
           </DropdownMenuItem>
@@ -58,10 +74,89 @@ export const AuthButton = () => {
     );
   }
 
+  const handleSignOut = async () => {
+    if (useMockAuth) {
+      await MockAuthService.logout();
+      window.location.reload(); // Simple way to reset auth state
+    } else {
+      signOutUser();
+    }
+  };
+
+  const handleMockLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoggingIn(true);
+    
+    try {
+      const user = await MockAuthService.login(loginData.username, loginData.password);
+      if (user) {
+        toast.success("Logged in successfully!");
+        setIsDialogOpen(false);
+        setLoginData({ username: '', password: '' });
+        window.location.reload(); // Simple way to refresh auth state
+      } else {
+        toast.error("Invalid credentials");
+      }
+    } catch (error) {
+      toast.error("Login failed");
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
+
+  // Show mock login dialog when Firebase is not available
+  if (!user && useMockAuth) {
+    return (
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogTrigger asChild>
+          <Button variant="ghost" size="sm">
+            <User className="h-4 w-4 mr-2" />
+            Sign In
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Sign In</DialogTitle>
+            <DialogDescription>
+              Enter your credentials to sign in. Use username: snehith, password: 12345678
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleMockLogin} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                type="text"
+                value={loginData.username}
+                onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
+                placeholder="Enter username"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={loginData.password}
+                onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                placeholder="Enter password"
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={isLoggingIn}>
+              {isLoggingIn ? "Signing in..." : "Sign In"}
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
     <Button variant="ghost" size="sm" onClick={signInWithGoogle}>
       <User className="h-4 w-4 mr-2" />
-      Sign In
+      Sign In (Google)
     </Button>
   );
 };

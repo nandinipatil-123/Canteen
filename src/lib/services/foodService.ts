@@ -3,6 +3,68 @@ import type { FoodItem } from "@/types/food";
 // Use relative path for API calls - will work in both development and production
 const API_BASE = '/api';
 
+// Mock user type that matches Firebase user structure
+export interface MockUser {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL?: string;
+}
+
+export class MockAuthService {
+  static async login(username: string, password: string): Promise<MockUser | null> {
+    try {
+      const response = await fetch(`${API_BASE}/auth/mock-login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.user;
+      }
+      return null;
+    } catch (error) {
+      console.error("Mock login error:", error);
+      return null;
+    }
+  }
+
+  static async logout(): Promise<boolean> {
+    try {
+      const response = await fetch(`${API_BASE}/auth/mock-logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      return response.ok;
+    } catch (error) {
+      console.error("Mock logout error:", error);
+      return false;
+    }
+  }
+
+  static async checkAuth(): Promise<MockUser | null> {
+    try {
+      const response = await fetch(`${API_BASE}/auth/mock-check`, {
+        credentials: 'include',
+      });
+
+      if (!response.ok) return null;
+      
+      const { authenticated, user } = await response.json();
+      return authenticated ? user : null;
+    } catch (error) {
+      console.error("Mock auth check error:", error);
+      return null;
+    }
+  }
+}
+
 export class AuthService {
   static async login(username: string, password: string): Promise<boolean> {
     try {
