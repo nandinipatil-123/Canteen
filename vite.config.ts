@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => ({
     hmr: {
       port: 5000,
     },
-    allowedHosts: ["all"],
+    allowedHosts: true,
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
