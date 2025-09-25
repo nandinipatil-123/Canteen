@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Menu from "./pages/Menu";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import OrderConfirmation from "./pages/OrderConfirmation";
 import NotFound from "./pages/NotFound";
 import { Header } from "./components/Header";
 import { useCart } from "./hooks/useCart";
@@ -30,6 +32,8 @@ const AppContent = () => {
         <Route path="/" element={<Index />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/confirmation/:orderId" element={<OrderConfirmation />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

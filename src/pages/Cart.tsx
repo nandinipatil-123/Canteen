@@ -9,12 +9,7 @@ const Cart = () => {
   const { toast } = useToast();
 
   const handleCheckout = () => {
-    toast({
-      title: "Order Placed!",
-      description: "Your order has been successfully placed. You'll receive a confirmation soon.",
-    });
-    clearCart();
-    navigate("/");
+    navigate("/checkout");
   };
 
   return (
