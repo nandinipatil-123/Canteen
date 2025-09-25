@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { foodItems } from "../src/lib/db/schema";
+import { foodItems } from "../src/server/db/schema";
 import { mockFoodItems } from "../src/data/mockData";
 import "dotenv/config";
 
